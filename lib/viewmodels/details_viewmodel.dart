@@ -1,9 +1,9 @@
+import 'package:financio_app/views/main_shell_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/education_model.dart';
 import '../models/income_model.dart';
 import '../viewmodels/home_viewmodel.dart';
-import '../views/home_screen.dart';
 import '../models/userprofile_model.dart';
 
 class DetailsViewModel extends ChangeNotifier {
@@ -14,14 +14,12 @@ class DetailsViewModel extends ChangeNotifier {
   EducationLevel? get selectedEducation => _selectedEducation;
   IncomeRange? get selectedIncome => _selectedIncome;
   bool get isLoading => _isLoading;
-  bool get canContinue =>
-      _selectedEducation != null && _selectedIncome != null;
+  bool get canContinue => _selectedEducation != null && _selectedIncome != null;
 
   List<EducationModel> get educationLevels =>
       EducationModel.getEducationLevels();
 
-  List<IncomeModel> get incomeRanges =>
-      IncomeModel.getIncomeRanges();
+  List<IncomeModel> get incomeRanges => IncomeModel.getIncomeRanges();
 
   void selectEducation(EducationLevel level) {
     _selectedEducation = level;
@@ -47,17 +45,10 @@ class DetailsViewModel extends ChangeNotifier {
     if (!context.mounted) return;
 
     /// TEMP data (replace later with API)
-    final userProfile = UserProfile(
-      totalXP: 0,
-      streak: 0,
-    );
+    final userProfile = UserProfile(totalXP: 0, streak: 0);
 
     final lessons = <Lesson>[
-      Lesson(
-        id: '1',
-        titleEn: 'Basics of Saving',
-        titleHi: 'बचत की मूल बातें',
-      ),
+      Lesson(id: '1', titleEn: 'Basics of Saving', titleHi: 'बचत की मूल बातें'),
       Lesson(
         id: '2',
         titleEn: 'Understanding Interest',
@@ -74,7 +65,7 @@ class DetailsViewModel extends ChangeNotifier {
             educationLevel: _selectedEducation,
             incomeRange: _selectedIncome,
           ),
-          child: const HomeScreen(),
+          child: const MainShellScreen(),
         ),
       ),
     );
