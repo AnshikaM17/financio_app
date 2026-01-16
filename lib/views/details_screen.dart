@@ -4,8 +4,7 @@ import '../viewmodels/details_viewmodel.dart';
 import '../viewmodels/welcome_viewmodel.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/app_colors.dart';
-import '../models/education_model.dart';
-import '../models/income_model.dart';
+
 
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({super.key});
@@ -186,11 +185,9 @@ class _DetailsScreenContent extends StatelessWidget {
                       : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: viewModel.canContinue
-                        ? AppColors.mediumGray
+                        ? AppColors.primaryGreen
                         : AppColors.mediumGray,
-                    foregroundColor: viewModel.canContinue
-                        ? AppColors.darkText
-                        : AppColors.textGray,
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
