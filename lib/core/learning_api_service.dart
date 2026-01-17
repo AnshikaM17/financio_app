@@ -4,7 +4,7 @@ import '../models/lesson_model.dart';
 
 class LearningApiService {
   static const baseUrl =
-      'http://localhost:3000';
+      'https://image-financio.onrender.com';
 
   static Future<void> generateLesson({
     required String topic,
