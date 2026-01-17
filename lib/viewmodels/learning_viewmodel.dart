@@ -8,7 +8,7 @@ enum LearningStep { topics, loading, lesson, quiz, result }
 class LearningViewModel extends ChangeNotifier {
   LearningStep step = LearningStep.topics;
 
-  final flutterTts = FlutterTts();
+  final FlutterTts flutterTts = FlutterTts();
 
   Lesson? lesson;
   String level = 'beginner';
@@ -43,18 +43,34 @@ class LearningViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// 🔊 SAFE TTS (NO CRASH)
   Future<void> playVoice() async {
-    await flutterTts.stop();
-    await flutterTts.setLanguage('en-IN');
-    await flutterTts.setSpeechRate(0.95);
-    await flutterTts.speak(lesson!.voiceScript);
+    if (lesson == null) return;
+
+    try {
+      await flutterTts.setLanguage('en-IN');
+      await flutterTts.setSpeechRate(0.6);
+      await flutterTts.speak(lesson!.voiceScript);
+    } catch (e) {
+      debugPrint('TTS error: $e');
+    }
   }
+
+  Future<void> stopVoice() async {
+  try {
+    await flutterTts.stop();
+  } catch (e) {
+    debugPrint('TTS stop error: $e');
+  }
+}
+
 
   void submitQuiz() {
     score = 0;
     lesson!.quiz.asMap().forEach((i, q) {
       if (answers[i] == q.correctIndex) score++;
     });
+
     step = LearningStep.result;
     notifyListeners();
   }
@@ -65,5 +81,11 @@ class LearningViewModel extends ChangeNotifier {
     score = 0;
     step = LearningStep.topics;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    flutterTts.stop();
+    super.dispose();
   }
 }

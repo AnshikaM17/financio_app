@@ -1,3 +1,4 @@
+import 'package:financio_app/utils/image_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/learning_viewmodel.dart';
@@ -26,7 +27,13 @@ class _LearningContent extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            if (vm.step == LearningStep.topics) {
+              Navigator.pop(context);
+            } else {
+              vm.reset(); // step-safe back
+            }
+          },
         ),
         title: const Text('Learn with Mitra'),
         backgroundColor: AppColors.primaryGreen,
@@ -43,7 +50,7 @@ class _LearningContent extends StatelessWidget {
 
   Widget _buildStep(LearningViewModel vm) {
     switch (vm.step) {
-      // ───────────────── TOPICS ─────────────────
+      // ───────── TOPICS ─────────
       case LearningStep.topics:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +64,10 @@ class _LearningContent extends StatelessWidget {
                 decoration: const InputDecoration(border: InputBorder.none),
                 items: const [
                   DropdownMenuItem(value: 'beginner', child: Text('Beginner')),
-                  DropdownMenuItem(value: 'intermediate', child: Text('Intermediate')),
+                  DropdownMenuItem(
+                    value: 'intermediate',
+                    child: Text('Intermediate'),
+                  ),
                   DropdownMenuItem(value: 'advanced', child: Text('Advanced')),
                 ],
                 onChanged: (v) {
@@ -81,7 +91,7 @@ class _LearningContent extends StatelessWidget {
           ],
         );
 
-      // ───────────────── LOADING ─────────────────
+      // ───────── LOADING ─────────
       case LearningStep.loading:
         return const Center(
           child: Padding(
@@ -90,18 +100,31 @@ class _LearningContent extends StatelessWidget {
           ),
         );
 
-      // ───────────────── LESSON ─────────────────
+      // ───────── LESSON (IMAGES HERE) ─────────
       case LearningStep.lesson:
+        final images = vm.selectedTopic == null
+            ? <String>[]
+            : getLessonImages(topic: vm.selectedTopic!, level: vm.level);
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _GradientHeader(vm.lesson!.title),
             const SizedBox(height: 24),
 
-            _PrimaryButton(
-              text: '🔊 Listen Explanation',
-              onTap: vm.playVoice,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(18),
+              child: Image.asset(
+                images.first, // ✅ only one image
+                width: double.infinity,
+                height: 220,
+                fit: BoxFit.cover,
+              ),
             ),
+
+            const SizedBox(height: 16),
+
+            _RowButtons(onPlay: vm.playVoice, onStop: vm.stopVoice),
 
             const SizedBox(height: 12),
 
@@ -115,7 +138,7 @@ class _LearningContent extends StatelessWidget {
           ],
         );
 
-      // ───────────────── QUIZ ─────────────────
+      // ───────── QUIZ ─────────
       case LearningStep.quiz:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,22 +181,16 @@ class _LearningContent extends StatelessWidget {
             }),
 
             const SizedBox(height: 16),
-
-            _PrimaryButton(
-              text: 'Submit',
-              onTap: vm.submitQuiz,
-            ),
+            _PrimaryButton(text: 'Submit', onTap: vm.submitQuiz),
           ],
         );
 
-      // ───────────────── RESULT ─────────────────
+      // ───────── RESULT ─────────
       case LearningStep.result:
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _GradientHeader(
-              'Score: ${vm.score}/${vm.lesson!.quiz.length}',
-            ),
+            _GradientHeader('Score: ${vm.score}/${vm.lesson!.quiz.length}'),
             const SizedBox(height: 24),
 
             ...vm.lesson!.quiz.map(
@@ -197,8 +214,6 @@ class _LearningContent extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 16),
-
             Center(
               child: TextButton(
                 onPressed: vm.reset,
@@ -211,7 +226,7 @@ class _LearningContent extends StatelessWidget {
   }
 }
 
-/* ─────────────── UI HELPERS (STYLE ONLY) ─────────────── */
+/* ───────── UI HELPERS (UNCHANGED) ───────── */
 
 class _SectionTitle extends StatelessWidget {
   final String text;
@@ -238,9 +253,7 @@ class _Card extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 10),
-        ],
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10)],
       ),
       child: child,
     );
@@ -346,3 +359,46 @@ class _SecondaryButton extends StatelessWidget {
     );
   }
 }
+
+class _RowButtons extends StatelessWidget {
+  final VoidCallback onPlay;
+  final VoidCallback onStop;
+
+  const _RowButtons({
+    required this.onPlay,
+    required this.onStop,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: ElevatedButton(
+            onPressed: onPlay,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryGreen,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+            child: const Text('🔊 Listen'),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: OutlinedButton(
+            onPressed: onStop,
+            style: OutlinedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+            child: const Text('⏹ Stop'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
