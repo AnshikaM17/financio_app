@@ -14,6 +14,12 @@ class HomeViewModel extends ChangeNotifier {
   String _language = 'en';
   String get language => _language;
 
+  bool _habitCompleted = false;
+  bool get habitCompleted => _habitCompleted;
+
+  String? _dailyHabitText;
+  String? get dailyHabitText => _dailyHabitText;
+
   HomeViewModel({
     required this.userProfile,
     required this.lessons,
@@ -46,5 +52,15 @@ void openTools(BuildContext context) {
 
   void openLesson(BuildContext context, Lesson lesson) {
     // TODO: navigate to lesson details
+  }
+
+  void completeDailyHabit(BuildContext context) {
+    _habitCompleted = true;
+    notifyListeners();
+    // TODO: implement habit completion logic
+  }
+
+  void startDailyQuiz(BuildContext context) {
+    // TODO: navigate to quiz screen
   }
 }

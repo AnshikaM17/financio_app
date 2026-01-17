@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/onboarding_viewmodel.dart';
-import '../viewmodels/welcome_viewmodel.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/app_colors.dart';
 import '../models/user_type_model.dart';
@@ -24,7 +23,6 @@ class _OnboardingScreenContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<OnboardingViewModel>(context);
-    final welcomeViewModel = Provider.of<WelcomeViewModel>(context);
     final localizations = AppLocalizations.of(context)!;
 
     return Scaffold(

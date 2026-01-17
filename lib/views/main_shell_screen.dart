@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../viewmodels/home_viewmodel.dart';
 import 'home_screen.dart';
 import 'mitra_chat_screen.dart';
 import 'rewards_screen.dart';
@@ -18,8 +16,6 @@ class _MainShellScreenState extends State<MainShellScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final homeVm = context.watch<HomeViewModel>();
-
     final pages = [
       const HomeScreen(),
       const MitraChatScreen(),
