@@ -104,8 +104,8 @@ class HomeScreen extends StatelessWidget {
                               ? const [Color(0xFF9CA3AF), Color(0xFF6B7280)]
                               : const [Color(0xFF22C55E), Color(0xFF16A34A)],
                           onTap: () {
-                            if (!vm.habitCompleted && !vm.isLoading) {
-                              vm.completeDailyHabit(context);
+                            if (!vm.isLoading) {
+                              vm.openDailyHabit(context);
                             }
                           },
                         ),

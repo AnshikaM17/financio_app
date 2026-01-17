@@ -39,6 +39,7 @@ class FeatureButton extends StatelessWidget {
           ],
         ),
         child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(

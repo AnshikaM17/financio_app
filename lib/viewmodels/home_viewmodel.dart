@@ -1,8 +1,14 @@
+import 'package:financio_app/models/quiz_model.dart';
 import 'package:financio_app/models/userprofile_model.dart';
 import 'package:financio_app/views/calculator_screen.dart';
+import 'package:financio_app/views/daily_habit_screen.dart';
+import 'package:financio_app/views/quiz_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/education_model.dart';
 import '../models/income_model.dart';
+import '../core/api_service.dart';
+import '../core/user_session.dart';
 
 class HomeViewModel extends ChangeNotifier {
   final UserProfile userProfile;
@@ -14,6 +20,7 @@ class HomeViewModel extends ChangeNotifier {
   String _language = 'en';
   String get language => _language;
 
+  String? _habitId;
   bool _habitCompleted = false;
   bool get habitCompleted => _habitCompleted;
 
@@ -38,6 +45,26 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> loadDailyHabit() async {
+    _isLoading = true;
+    notifyListeners();
+
+    final userId = await UserSession.getOrCreateUserId();
+
+    final res = await ApiService.getDailyHabit(
+      userId: userId,
+      language: _language,
+      profession: 'farmer', // later from profile
+    );
+
+    _dailyHabitText = res['habit'];
+    _habitId = res['habit_id'];
+    _habitCompleted = res['completed'];
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
   void startGame(BuildContext context) {
     // TODO: navigate to game screen
   }
@@ -57,13 +84,74 @@ void openTools(BuildContext context) {
     // TODO: navigate to lesson details
   }
 
-  void completeDailyHabit(BuildContext context) {
-    _habitCompleted = true;
+  Future<void> completeDailyHabit(BuildContext context) async {
+    if (_habitId == null) return;
+
+    _isLoading = true;
     notifyListeners();
-    // TODO: implement habit completion logic
+
+    final userId = await UserSession.getOrCreateUserId();
+
+    await ApiService.completeHabit(
+      userId: userId,
+      habitId: _habitId!,
+    );
+
+    _habitCompleted = true;
+    _isLoading = false;
+    notifyListeners();
   }
 
-  void startDailyQuiz(BuildContext context) {
-    // TODO: navigate to quiz screen
-  }
+  Future<void> openDailyHabit(BuildContext context) async {
+  _isLoading = true;
+  notifyListeners();
+
+  await loadDailyHabit();
+
+  _isLoading = false;
+  notifyListeners();
+
+  final homeVm = this; // 👈 IMPORTANT
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+    ),
+    builder: (_) {
+      return ChangeNotifierProvider.value(
+        value: homeVm,
+        child: const DailyHabitSheet(),
+      );
+    },
+  );
+}
+
+
+  Future<void> startDailyQuiz(BuildContext context) async {
+  _isLoading = true;
+  notifyListeners();
+
+  final userId = await UserSession.getOrCreateUserId();
+
+  final res = await ApiService.generateQuiz(
+    userId: userId,
+    language: _language,
+    profession: 'farmer',
+  );
+
+  _isLoading = false;
+  notifyListeners();
+
+  final quiz = Quiz.fromJson(res);
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => QuizScreen(quiz: quiz),
+    ),
+  );
+}
+
 }
