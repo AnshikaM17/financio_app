@@ -20,6 +20,9 @@ class HomeViewModel extends ChangeNotifier {
   String? _dailyHabitText;
   String? get dailyHabitText => _dailyHabitText;
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
   HomeViewModel({
     required this.userProfile,
     required this.lessons,

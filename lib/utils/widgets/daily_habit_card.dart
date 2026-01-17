@@ -1,63 +1,115 @@
 import 'package:flutter/material.dart';
 
-class DailyHabitCard extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final bool completed;
-  final VoidCallback? onTap;
-
-  const DailyHabitCard({
-    super.key,
-    required this.title,
-    required this.subtitle,
-    required this.completed,
-    this.onTap,
-  });
+class DailyHabitScreen extends StatelessWidget {
+  const DailyHabitScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(18),
-      onTap: completed ? null : onTap,
-      child: Container(
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: completed
-                ? [Colors.grey.shade300, Colors.grey.shade400]
-                : const [Color(0xFF22C55E), Color(0xFF16A34A)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(18),
-        ),
+    // TEMP placeholders (match backend response)
+    final String habitText =
+        "Count how much cash you have right now and keep it safe.";
+    final int habitXP = 5;
+    final bool alreadyCompleted = false; // future: from backend
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Daily Habit'), centerTitle: true),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(
-              completed ? Icons.check_circle : Icons.self_improvement,
-              color: Colors.white,
-              size: 28,
-            ),
-            const SizedBox(height: 12),
-            Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+            const SizedBox(height: 20),
+
+            /// 🌱 HABIT CARD
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(22),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF22C55E), Color(0xFF16A34A)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(
+                    Icons.self_improvement,
+                    color: Colors.white,
+                    size: 34,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    habitText,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 6),
-            Text(
-              completed ? 'Completed today ✅' : subtitle,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 13,
+
+            const SizedBox(height: 24),
+
+            /// ⭐ XP REWARD
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFDCFCE7),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.star, color: Color(0xFF16A34A)),
+                  const SizedBox(width: 8),
+                  Text(
+                    '+$habitXP XP',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF166534),
+                    ),
+                  ),
+                ],
               ),
             ),
+
+            const Spacer(),
+
+            /// ✅ COMPLETE BUTTON
+            SizedBox(
+              width: double.infinity,
+              height: 54,
+              child: ElevatedButton(
+                onPressed: alreadyCompleted
+                    ? null
+                    : () {
+                        // future: call completeHabit()
+                        Navigator.pop(context);
+                      },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: alreadyCompleted
+                      ? Colors.grey
+                      : const Color(0xFF16A34A),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                child: Text(
+                  alreadyCompleted ? 'Completed Today ✅' : 'Mark as Done',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
           ],
         ),
       ),

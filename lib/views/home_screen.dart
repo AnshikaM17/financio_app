@@ -23,14 +23,10 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(height: 28),
 
                   /// 🔧 TOOLS & GAMES
-                  Text(
-                    vm.language == 'hi'
-                        ? 'सुविधाएं और खेल'
-                        : 'Tools & Games',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  _SectionTitle(
+                    titleHi: 'सुविधाएं और खेल',
+                    titleEn: 'Tools & Games',
+                    language: vm.language,
                   ),
                   const SizedBox(height: 14),
 
@@ -47,7 +43,11 @@ class HomeScreen extends StatelessWidget {
                             Color(0xFF3B82F6),
                             Color(0xFF2563EB),
                           ],
-                          onTap: () => vm.startGame(context),
+                          onTap: () {
+                            if (!vm.isLoading) {
+                              vm.startGame(context);
+                            }
+                          },
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -62,7 +62,11 @@ class HomeScreen extends StatelessWidget {
                             Color(0xFFA855F7),
                             Color(0xFF7E22CE),
                           ],
-                          onTap: () => vm.openTools(context),
+                          onTap: () {
+                            if (!vm.isLoading) {
+                              vm.openTools(context);
+                            }
+                          },
                         ),
                       ),
                     ],
@@ -71,18 +75,13 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(height: 32),
 
                   /// 🧠 TODAY WITH MITRA
-                  Text(
-                    vm.language == 'hi'
-                        ? 'आज मित्रा के साथ'
-                        : 'Today with Mitra',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  _SectionTitle(
+                    titleHi: 'आज मित्रा के साथ',
+                    titleEn: 'Today with Mitra',
+                    language: vm.language,
                   ),
                   const SizedBox(height: 16),
 
-                  /// 🌱 DAILY HABIT + ❓ DAILY QUIZ
                   Row(
                     children: [
                       Expanded(
@@ -90,17 +89,22 @@ class HomeScreen extends StatelessWidget {
                           title: vm.language == 'hi'
                               ? 'आज की आदत'
                               : 'Daily Habit',
-                          subtitle: vm.dailyHabitText ??
-                              (vm.language == 'hi'
-                                  ? 'छोटी वित्तीय आदत'
-                                  : 'Small financial habit'),
-                          icon: Icons.self_improvement,
-                          gradient: const [
-                            Color(0xFF22C55E),
-                            Color(0xFF16A34A),
-                          ],
+                          subtitle: vm.habitCompleted
+                              ? (vm.language == 'hi'
+                                    ? 'आज पूरी हो गई ✅'
+                                    : 'Completed today ✅')
+                              : (vm.dailyHabitText ??
+                                    (vm.language == 'hi'
+                                        ? 'छोटी वित्तीय आदत'
+                                        : 'Small financial habit')),
+                          icon: vm.habitCompleted
+                              ? Icons.check_circle
+                              : Icons.self_improvement,
+                          gradient: vm.habitCompleted
+                              ? const [Color(0xFF9CA3AF), Color(0xFF6B7280)]
+                              : const [Color(0xFF22C55E), Color(0xFF16A34A)],
                           onTap: () {
-                            if (!vm.habitCompleted) {
+                            if (!vm.habitCompleted && !vm.isLoading) {
                               vm.completeDailyHabit(context);
                             }
                           },
@@ -120,7 +124,11 @@ class HomeScreen extends StatelessWidget {
                             Color(0xFF6366F1),
                             Color(0xFF4F46E5),
                           ],
-                          onTap: () => vm.startDailyQuiz(context),
+                          onTap: () {
+                            if (!vm.isLoading) {
+                              vm.startDailyQuiz(context);
+                            }
+                          },
                         ),
                       ),
                     ],
@@ -141,8 +149,7 @@ class HomeScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            color:
-                                const Color(0xFF22C55E).withOpacity(0.15),
+                            color: const Color(0xFF22C55E).withOpacity(0.15),
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(
@@ -168,8 +175,8 @@ class HomeScreen extends StatelessWidget {
                               const SizedBox(height: 6),
                               Text(
                                 vm.language == 'hi'
-                                    ? 'मित्रा आपका एआई वित्तीय साथी है, जो रोज़ाना सवालों, स्मार्ट मार्गदर्शन और आसान आदतों के ज़रिए बेहतर पैसे की समझ बनाता है।'
-                                    : 'Mitra is your AI-powered financial companion, helping you build better money habits through daily questions, smart guidance, and simple actions.',
+                                    ? 'मित्रा आपका एआई वित्तीय साथी है, जो रोज़ाना सवालों, आदतों और स्मार्ट मार्गदर्शन से बेहतर पैसे की समझ बनाता है।'
+                                    : 'Mitra is your AI-powered financial companion, helping you build better money habits through daily questions and smart guidance.',
                                 style: const TextStyle(
                                   fontSize: 13,
                                   color: Colors.black54,
@@ -188,6 +195,26 @@ class HomeScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _SectionTitle extends StatelessWidget {
+  final String titleHi;
+  final String titleEn;
+  final String language;
+
+  const _SectionTitle({
+    required this.titleHi,
+    required this.titleEn,
+    required this.language,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      language == 'hi' ? titleHi : titleEn,
+      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
     );
   }
 }
@@ -254,10 +281,7 @@ class _Header extends StatelessWidget {
           const SizedBox(height: 20),
           Row(
             children: [
-              StatCard(
-                label: 'XP',
-                value: vm.userProfile.totalXP.toString(),
-              ),
+              StatCard(label: 'XP', value: vm.userProfile.totalXP.toString()),
               const SizedBox(width: 12),
               StatCard(
                 label: vm.language == 'hi' ? 'स्ट्रीक' : 'Streak',
