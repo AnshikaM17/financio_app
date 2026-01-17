@@ -45,7 +45,7 @@ class ApiService {
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'user_id': userId,
-        'quiz_type': 'profession',
+        'quiz_type': 'general',
         'language': language,
         'profession': profession,
       }),
@@ -55,21 +55,21 @@ class ApiService {
   }
 
   static Future<Map<String, dynamic>> submitQuiz({
-  required String userId,
-  required String quizId,
-  required Map<String, String> answers,
-}) async {
-  final res = await http.post(
-    Uri.parse('$baseUrl/quiz/submit'),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({
-      'user_id': userId,
-      'quiz_id': quizId,
-      'answers': answers,
-    }),
-  );
+    required String userId,
+    required String quizId,
+    required Map<String, String> answers, // ✅ LETTERS
+  }) async {
+    final res = await http.post(
+      Uri.parse('$baseUrl/quiz/submit'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'user_id': userId,
+        'quiz_id': quizId,
+        'answers': answers,
+      }),
+    );
 
-  return jsonDecode(res.body);
-}
+    return jsonDecode(res.body);
+  }
 }
 

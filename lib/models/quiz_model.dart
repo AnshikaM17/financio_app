@@ -11,7 +11,7 @@ class QuizQuestion {
 
   factory QuizQuestion.fromJson(Map<String, dynamic> json) {
     return QuizQuestion(
-      id: json['id'].toString(), // ✅ FIX (INT → STRING)
+      id: json['id'].toString(), // ✅ int → string
       question: json['question'].toString(),
       options: (json['options'] as List)
           .map((e) => e.toString())
@@ -31,7 +31,7 @@ class Quiz {
 
   factory Quiz.fromJson(Map<String, dynamic> json) {
     return Quiz(
-      quizId: json['quiz_id'].toString(), // ✅ SAFE
+      quizId: json['quiz_id'].toString(),
       questions: (json['questions'] as List)
           .map((q) => QuizQuestion.fromJson(q))
           .toList(),

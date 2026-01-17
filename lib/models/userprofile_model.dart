@@ -10,9 +10,5 @@ class Lesson {
   final String titleEn;
   final String titleHi;
 
-  Lesson({
-    required this.id,
-    required this.titleEn,
-    required this.titleHi,
-  });
+  Lesson({required this.id, required this.titleEn, required this.titleHi});
 }
