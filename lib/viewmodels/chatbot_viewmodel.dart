@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import '../models/chat_message.dart';
 
 class ChatbotViewModel extends ChangeNotifier {
-  static const String backendUrl = 'http://127.0.0.1:8000/chat';
+  static const String backendUrl = 'https://mitra-backend-yau8.onrender.com/chat';
 
   final List<ChatMessage> _messages = [
     ChatMessage(type: MessageType.bot, text: 'hi'),
