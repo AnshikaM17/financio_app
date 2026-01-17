@@ -64,10 +64,7 @@ class _MitraChatContentState extends State<_MitraChatContent> {
             padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  Color(0xFF22C55E),
-                  Color(0xFF16A34A),
-                ],
+                colors: [Color(0xFF22C55E), Color(0xFF16A34A)],
               ),
             ),
             child: Row(
@@ -86,10 +83,7 @@ class _MitraChatContentState extends State<_MitraChatContent> {
                     ),
                     Text(
                       '24/7 Financial Assistant',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 12,
-                      ),
+                      style: TextStyle(color: Colors.white70, fontSize: 12),
                     ),
                   ],
                 ),
@@ -128,28 +122,42 @@ class _MitraChatContentState extends State<_MitraChatContent> {
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 6),
                     padding: const EdgeInsets.all(14),
-                    constraints:
-                        const BoxConstraints(maxWidth: 300),
+                    constraints: const BoxConstraints(maxWidth: 300),
                     decoration: BoxDecoration(
                       color: msg.type == MessageType.user
                           ? const Color(0xFF22C55E)
                           : Colors.white,
                       borderRadius: BorderRadius.circular(18),
                       boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 8,
-                          color: Colors.black12,
-                        ),
+                        BoxShadow(blurRadius: 8, color: Colors.black12),
                       ],
                     ),
-                    child: Text(
-                      displayText,
-                      style: TextStyle(
-                        color: msg.type == MessageType.user
-                            ? Colors.white
-                            : Colors.black87,
-                        fontSize: 14,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          displayText,
+                          style: TextStyle(
+                            color: msg.type == MessageType.user
+                                ? Colors.white
+                                : Colors.black87,
+                            fontSize: 14,
+                          ),
+                        ),
+                        if (msg.type == MessageType.bot)
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: IconButton(
+                              icon: Icon(
+                                vm.isSpeaking ? Icons.stop : Icons.volume_up,
+                                size: 18,
+                                color: Colors.green,
+                              ),
+                              onPressed: () =>
+                                  vm.speak(displayText, widget.language),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                 );
@@ -169,8 +177,7 @@ class _MitraChatContentState extends State<_MitraChatContent> {
                 Expanded(
                   child: TextField(
                     controller: vm.inputController,
-                    onSubmitted: (_) =>
-                        vm.sendMessage(widget.language),
+                    onSubmitted: (_) => vm.sendMessage(widget.language),
                     decoration: InputDecoration(
                       hintText: widget.language == 'hi'
                           ? 'यहाँ लिखें...'
@@ -186,10 +193,8 @@ class _MitraChatContentState extends State<_MitraChatContent> {
                 ),
                 const SizedBox(width: 8),
                 IconButton(
-                  icon: const Icon(Icons.send,
-                      color: Colors.green),
-                  onPressed: () =>
-                      vm.sendMessage(widget.language),
+                  icon: const Icon(Icons.send, color: Colors.green),
+                  onPressed: () => vm.sendMessage(widget.language),
                 ),
               ],
             ),
@@ -233,10 +238,7 @@ class _Dot extends StatelessWidget {
       builder: (context, value, _) {
         return Opacity(
           opacity: value,
-          child: const CircleAvatar(
-            radius: 4,
-            backgroundColor: Colors.grey,
-          ),
+          child: const CircleAvatar(radius: 4, backgroundColor: Colors.grey),
         );
       },
     );
