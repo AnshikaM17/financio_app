@@ -9,7 +9,6 @@ class DailyHabitScreen extends StatelessWidget {
     final String habitText =
         "Count how much cash you have right now and keep it safe.";
     final int habitXP = 5;
-    final bool alreadyCompleted = false; // future: from backend
 
     return Scaffold(
       appBar: AppBar(title: const Text('Daily Habit'), centerTitle: true),
@@ -85,23 +84,19 @@ class DailyHabitScreen extends StatelessWidget {
               width: double.infinity,
               height: 54,
               child: ElevatedButton(
-                onPressed: alreadyCompleted
-                    ? null
-                    : () {
-                        // future: call completeHabit()
-                        Navigator.pop(context);
-                      },
+                onPressed: () {
+                  // future: call completeHabit()
+                  Navigator.pop(context);
+                },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: alreadyCompleted
-                      ? Colors.grey
-                      : const Color(0xFF16A34A),
+                  backgroundColor: const Color(0xFF16A34A),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                child: Text(
-                  alreadyCompleted ? 'Completed Today ✅' : 'Mark as Done',
-                  style: const TextStyle(
+                child: const Text(
+                  'Mark as Done',
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
