@@ -35,10 +35,10 @@ class HomeScreen extends StatelessWidget {
                       Expanded(
                         child: FeatureButton(
                           title: vm.language == 'hi'
-                              ? 'खेल खेलें'
-                              : 'Play Games',
+                              ? 'पढ़ना शुरू करें'
+                              : 'Start Lessons',
                           subtitle: 'Fraud & Needs',
-                          icon: Icons.sports_esports,
+                          icon: Icons.school,
                           gradient: const [
                             Color(0xFF3B82F6),
                             Color(0xFF2563EB),

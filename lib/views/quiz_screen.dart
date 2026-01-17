@@ -1,6 +1,5 @@
 import 'package:financio_app/viewmodels/home_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../models/quiz_model.dart';
 import '../models/quiz_result_model.dart';
 import '../views/quiz_result_screen.dart';
