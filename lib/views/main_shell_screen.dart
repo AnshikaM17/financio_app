@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../viewmodels/schemes_viewmodel.dart';
+import '../viewmodels/home_viewmodel.dart';
 import 'home_screen.dart';
 import 'mitra_chat_screen.dart';
-import 'rewards_screen.dart';
+import 'schemes_screen.dart';
 
 class MainShellScreen extends StatefulWidget {
   const MainShellScreen({super.key});
@@ -16,10 +19,15 @@ class _MainShellScreenState extends State<MainShellScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final homeVm = context.watch<HomeViewModel>();
+    
     final pages = [
       const HomeScreen(),
       const MitraChatScreen(),
-      const RewardsScreen(),
+      ChangeNotifierProvider(
+        create: (_) => SchemesViewModel()..changeLanguage(homeVm.language),
+        child: const SchemesScreen(),
+      ),
     ];
 
     return Scaffold(
@@ -43,8 +51,8 @@ class _MainShellScreenState extends State<MainShellScreen> {
             label: 'Mitra',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.card_giftcard),
-            label: 'Rewards',
+            icon: Icon(Icons.account_balance),
+            label: 'Schemes',
           ),
         ],
       ),
