@@ -145,16 +145,16 @@ class HomeViewModel extends ChangeNotifier {
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => QuizScreen(quiz: quiz)),
+      MaterialPageRoute(builder: (_) => QuizScreen(quiz: quiz, homeViewModel: this,)),
     );
   }
 
   void applyQuizResult({required int xpGained, required int streak}) {
+    debugPrint('🔥 applyQuizResult called: +$xpGained XP');
     userProfile.totalXP += xpGained;
     userProfile.streak = streak;
 
     saveProfile();
-
     notifyListeners();
   }
 
@@ -163,4 +163,5 @@ class HomeViewModel extends ChangeNotifier {
     prefs.setInt('xp', userProfile.totalXP);
     prefs.setInt('streak', userProfile.streak);
   }
+
 }

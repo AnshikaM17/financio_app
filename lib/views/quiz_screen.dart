@@ -9,7 +9,12 @@ import '../core/user_session.dart';
 
 class QuizScreen extends StatefulWidget {
   final Quiz quiz;
-  const QuizScreen({super.key, required this.quiz});
+  final HomeViewModel homeViewModel;
+  const QuizScreen({
+    super.key,
+    required this.quiz,
+    required this.homeViewModel,
+  });
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -197,21 +202,25 @@ class _QuizScreenState extends State<QuizScreen> {
 
     final result = QuizResult.fromJson(res);
 
-    final homeVM = context.read<HomeViewModel>();
+    widget.homeViewModel.applyQuizResult(
+      xpGained: result.xpGained,
+      streak: result.streak,
+    );
 
     Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => QuizResultScreen(
-          result: result,
-          onDone: () {
-            homeVM.applyQuizResult(
-              xpGained: result.xpGained,
-              streak: result.streak,
-            );
-          },
-        ),
-      ),
-    );
+  context,
+  MaterialPageRoute(
+    builder: (_) => QuizResultScreen(
+      result: result,
+      onDone: () {
+        widget.homeViewModel.applyQuizResult(
+          xpGained: result.xpGained,
+          streak: result.streak,
+        );
+      },
+    ),
+  ),
+);
+
   }
 }

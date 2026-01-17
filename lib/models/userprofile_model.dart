@@ -1,6 +1,6 @@
 class UserProfile {
-  final int totalXP;
-  final int streak;
+  int totalXP;
+  int streak;
 
   UserProfile({required this.totalXP, required this.streak});
 }
