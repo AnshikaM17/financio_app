@@ -72,7 +72,6 @@ class _LearningContent extends StatelessWidget {
                 ],
                 onChanged: (v) {
                   vm.level = v!;
-                  vm.notifyListeners();
                 },
               ),
             ),
@@ -132,7 +131,6 @@ class _LearningContent extends StatelessWidget {
               text: 'Start Quiz',
               onTap: () {
                 vm.step = LearningStep.quiz;
-                vm.notifyListeners();
               },
             ),
           ],
@@ -169,7 +167,6 @@ class _LearningContent extends StatelessWidget {
                         groupValue: vm.answers[i],
                         onChanged: (v) {
                           vm.answers[i] = v!;
-                          vm.notifyListeners();
                         },
                         title: Text(o.value),
                         contentPadding: EdgeInsets.zero,

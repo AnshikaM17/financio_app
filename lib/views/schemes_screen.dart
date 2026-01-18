@@ -46,6 +46,7 @@ class _SchemesScreenState extends State<SchemesScreen> {
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             title: Text(
               vm.language == 'hi' ? 'सरकारी योजनाएं' : 'Government Schemes',
               style: const TextStyle(fontWeight: FontWeight.bold),
@@ -53,17 +54,6 @@ class _SchemesScreenState extends State<SchemesScreen> {
             backgroundColor: Colors.white,
             elevation: 0,
             foregroundColor: Colors.black,
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.volume_up),
-                onPressed: () {
-                  _speak(
-                    vm.language == 'hi' ? 'सरकारी योजनाएं' : 'Government Schemes',
-                    vm.language,
-                  );
-                },
-              ),
-            ],
           ),
           body: vm.questionnaireCompleted
               ? _buildSchemesList(vm)

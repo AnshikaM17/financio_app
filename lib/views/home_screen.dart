@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                           ],
                           onTap: () {
                             if (!vm.isLoading) {
-                              vm.startGame(context);
+                              vm.startLessons(context);
                             }
                           },
                         ),
@@ -54,22 +54,103 @@ class HomeScreen extends StatelessWidget {
                       Expanded(
                         child: FeatureButton(
                           title: vm.language == 'hi'
-                              ? 'कैलकुलेटर'
-                              : 'Calculator',
-                          subtitle: 'Interest Rate',
-                          icon: Icons.calculate,
+                              ? 'गेम खेलें'
+                              : 'Play Games',
+                          subtitle: vm.language == 'hi' 
+                              ? 'धोखाधड़ी पहचानो'
+                              : 'Spot the Scam',
+                          icon: Icons.games,
                           gradient: const [
-                            Color(0xFFA855F7),
-                            Color(0xFF7E22CE),
+                            Color(0xFFEF4444),
+                            Color(0xFFDC2626),
                           ],
                           onTap: () {
                             if (!vm.isLoading) {
-                              vm.openTools(context);
+                              vm.playFraudGame(context);
                             }
                           },
                         ),
                       ),
                     ],
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  // Calculator Button (full width row)
+                  InkWell(
+                    onTap: () {
+                      if (!vm.isLoading) {
+                        vm.openTools(context);
+                      }
+                    },
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFA855F7), Color(0xFF7E22CE)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 15,
+                            color: Colors.black12,
+                            offset: Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.25),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.calculate,
+                              size: 28,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  vm.language == 'hi'
+                                      ? 'कैलकुलेटर'
+                                      : 'Calculator',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  vm.language == 'hi'
+                                      ? 'ब्याज दर गणना'
+                                      : 'Interest Rate Calculator',
+                                  style: const TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Icon(
+                            Icons.arrow_forward_ios,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
 
                   const SizedBox(height: 32),

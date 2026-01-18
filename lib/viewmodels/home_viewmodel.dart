@@ -3,6 +3,7 @@ import 'package:financio_app/models/userprofile_model.dart';
 import 'package:financio_app/views/calculator_screen.dart';
 import 'package:financio_app/views/daily_habit_screen.dart';
 import 'package:financio_app/views/learning_screen.dart';
+import 'package:financio_app/views/fraud_game_screen.dart';
 import 'package:financio_app/views/quiz_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -67,13 +68,25 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void startGame(BuildContext context) {
+  void startLessons(BuildContext context) {
     Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (_) => const LearningScreen(),
-  ),
-);
+      context,
+      MaterialPageRoute(
+        builder: (_) => const LearningScreen(),
+      ),
+    );
+  }
+
+  void playFraudGame(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => FraudGameScreen(
+          language: _language,
+          onLanguageChanged: changeLanguage,
+        ),
+      ),
+    );
   }
 
   void openTools(BuildContext context) {
